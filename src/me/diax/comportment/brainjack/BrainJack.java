@@ -35,7 +35,7 @@ public class BrainJack {
         pointer = 0;
     }
 
-    public void evalutate(String input) {
+    public void evaluate(String input) {
         StringBuilder output = new StringBuilder();
         CharBuffer.wrap(input).chars().mapToObj(ch -> (char)ch).forEach(c -> {
             try {
@@ -71,7 +71,7 @@ public class BrainJack {
     }
 
     public static void main(String[] args) {
-        new BrainJack().evalutate(
+        new BrainJack().evaluate(
                 ",.++++++++++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++++++++++."
         );
     }
