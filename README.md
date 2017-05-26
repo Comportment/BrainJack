@@ -1,5 +1,5 @@
 # BrainJack
-Another Java Brainfsck interpretor...
+Another Java Brainfsck interpreter...
 
 Fully functional, can read from files or a string input.
 
