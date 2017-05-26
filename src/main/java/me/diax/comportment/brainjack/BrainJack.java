@@ -17,7 +17,6 @@
 package me.diax.comportment.brainjack;
 
 import java.io.*;
-import java.util.Scanner;
 
 /**
  * Created by Comportment at 17:24 on 26/05/17
@@ -27,15 +26,18 @@ import java.util.Scanner;
  */
 public class BrainJack {
     private final int amount;
+    private final InputStreamReader is;
     private byte[] cells;
     private int pointer;
 
     public BrainJack(int amount) {
+        is = new InputStreamReader(System.in);
         this.amount = amount;
         init();
     }
 
     public BrainJack() {
+        is = new InputStreamReader(System.in);
         amount = 65535;
         init();
     }
@@ -45,18 +47,18 @@ public class BrainJack {
         pointer = 0;
     }
 
-    public void interpret(File input) throws IOException {
-        if (!input.canRead()) return;
+    public String interpret(File input) throws IOException {
+        if (!input.canRead()) return "";
         BufferedReader reader = new BufferedReader(new FileReader(input));
         StringBuilder builder = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
             builder.append(line);
         }
-        this.interpret(builder.toString());
+        return this.interpret(builder.toString());
     }
 
-    public void interpret(String input) {
+    public String interpret(String input) {
         int brack = 0;
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
@@ -83,7 +85,7 @@ public class BrainJack {
                 }
                 case Characters.INPUT: {
                     try {
-                        cells[pointer] = (byte) new Scanner(System.in).nextLine().charAt(0);
+                        cells[pointer] = (byte) is.read();
                     } catch (Exception e) {
                         cells[pointer] = 0;
                     }
@@ -128,11 +130,10 @@ public class BrainJack {
                 }
             }
         }
-        System.out.println(builder);
+        return builder.toString();
     }
-
-    public static void main(String[] args) throws Exception {
-        new BrainJack().interpret(new File("/home/comportment/Projects/BrainJack/src/main/resources/example.bf"));
-        new BrainJack().interpret(">++++++++++[>++++>++++++>++++>+++++>++++>++++>++++++[<]>-]>>++>->----->->+>++[<]>.>.>.>.>.>.>.");
-    }
+    //public static void main(String[] args) throws Exception {
+    //    new BrainJack().interpret(new File("/home/comportment/Projects/BrainJack/src/main/resources/example.bf"));
+    //    new BrainJack().interpret(">++++++++++[>++++>++++++>++++>+++++>++++>++++>++++++[<]>-]>>++>->----->->+>++[<]>.>.>.>.>.>.>.");
+    //}
 }
