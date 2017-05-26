@@ -36,6 +36,7 @@ public class BrainJack {
     }
 
     public void evalutate(String input) {
+        StringBuilder output = new StringBuilder();
         CharBuffer.wrap(input).chars().mapToObj(ch -> (char)ch).forEach(c -> {
             switch (c) {
                 case Characters.LAST:
@@ -51,14 +52,15 @@ public class BrainJack {
                     cells[pointer]--;
                     break;
                 case Characters.OUT:
-                    System.out.println(cells[pointer]);
+                    output.append(Character.toString((char) cells[pointer]));
             }
         });
+        if (!output.toString().isEmpty()) System.out.println(output);
     }
 
     public static void main(String[] args) {
         new BrainJack().evalutate(
-                ".++.>.++.<."
+                "++++++++++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++++++++++."
         );
     }
 }
