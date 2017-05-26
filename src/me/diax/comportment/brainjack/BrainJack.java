@@ -16,7 +16,6 @@
 
 package me.diax.comportment.brainjack;
 
-import java.nio.CharBuffer;
 import java.util.Scanner;
 
 /**
@@ -26,53 +25,92 @@ import java.util.Scanner;
  * @author Comportment
  */
 public class BrainJack {
-
-    byte[] cells;
-    int pointer;
+    private final int cellSize;
+    private byte[] cells;
+    private int pointer;
 
     public BrainJack() {
-        cells = new byte[32];
+        cellSize = 65535;
+        cells = new byte[cellSize];
         pointer = 0;
     }
 
-    public void evaluate(String input) {
-        StringBuilder output = new StringBuilder();
-        CharBuffer.wrap(input).chars().mapToObj(ch -> (char)ch).forEach(c -> {
-            try {
-                switch (c) {
-                    case Characters.LAST:
-                        if (pointer >= 1) pointer--;
-                        break;
-                    case Characters.NEXT:
-                        pointer++;
-                        break;
-                    case Characters.PLUS:
-                        cells[pointer]++;
-                        break;
-                    case Characters.MINUS:
-                        cells[pointer]--;
-                        break;
-                    case Characters.OUT:
-                        output.append(Character.toString((char) cells[pointer]));
-                        break;
-                    case Characters.INPUT:
-                        try {
-                            cells[pointer] = (byte) new Scanner(System.in).nextLine().charAt(0);
-                        } catch (StringIndexOutOfBoundsException e) {
-                            cells[pointer] = 0;
-                        }
-                        break;
+    public void interpret(String input) {
+        int brack = 0;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            switch (input.charAt(i)) {
+                case Characters.NEXT: {
+                    pointer = (pointer == cellSize - 1) ? 0 : pointer + 1;
+                    break;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                case Characters.LAST: {
+                    pointer = (pointer == 0) ? cellSize - 1 : pointer - 1;
+                    break;
+                }
+                case Characters.PLUS: {
+                    cells[pointer]++;
+                    break;
+                }
+                case Characters.MINUS: {
+                    cells[pointer]--;
+                    break;
+                }
+                case Characters.OUT: {
+                    builder.append((char) cells[pointer]);
+                    break;
+                }
+                case Characters.INPUT: {
+                    try {
+                        cells[pointer] = (byte) new Scanner(System.in).nextLine().charAt(0);
+                    } catch (Exception e) {
+                        cells[pointer] = 0;
+                    }
+                    break;
+                }
+                case Characters.LBRACK: {
+                    if (cells[pointer] == 0) {
+                        i++;
+                        while (brack > 0 || input.charAt(i) != Characters.RBRACK) {
+                            switch (input.charAt(i)) {
+                                case Characters.LBRACK: {
+                                    brack++;
+                                    break;
+                                }
+                                case Characters.RBRACK: {
+                                    brack--;
+                                    break;
+                                }
+                            }
+                            i++;
+                        }
+                    }
+                    break;
+                }
+                case Characters.RBRACK: {
+                    if (cells[pointer] != 0) {
+                        i--;
+                        while (brack > 0 || input.charAt(i) != Characters.LBRACK) {
+                            switch (input.charAt(i)) {
+                                case Characters.LBRACK: {
+                                    brack--;
+                                    break;
+                                }
+                                case Characters.RBRACK: {
+                                    brack++;
+                                    break;
+                                }
+                            }
+                            i--;
+                        }
+                    }
+                }
             }
-        });
-        if (!output.toString().isEmpty()) System.out.println(output);
+        }
+        System.out.println(builder);
     }
 
     public static void main(String[] args) {
-        new BrainJack().evaluate(
-                ",.++++++++++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++++++++++."
-        );
+        new BrainJack().interpret("++++++++++[>++++++<-]>.");
     }
 }
