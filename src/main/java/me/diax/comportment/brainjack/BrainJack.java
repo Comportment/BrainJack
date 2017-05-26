@@ -16,6 +16,7 @@
 
 package me.diax.comportment.brainjack;
 
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -25,14 +26,34 @@ import java.util.Scanner;
  * @author Comportment
  */
 public class BrainJack {
-    private final int cellSize;
+    private final int amount;
     private byte[] cells;
     private int pointer;
 
+    public BrainJack(int amount) {
+        this.amount = amount;
+        init();
+    }
+
     public BrainJack() {
-        cellSize = 65535;
-        cells = new byte[cellSize];
+        amount = 65535;
+        init();
+    }
+
+    protected void init() {
+        cells = new byte[amount];
         pointer = 0;
+    }
+
+    public void interpret(File input) throws IOException {
+        if (!input.canRead()) return;
+        BufferedReader reader = new BufferedReader(new FileReader(input));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+        this.interpret(builder.toString());
     }
 
     public void interpret(String input) {
@@ -41,11 +62,11 @@ public class BrainJack {
         for (int i = 0; i < input.length(); i++) {
             switch (input.charAt(i)) {
                 case Characters.NEXT: {
-                    pointer = (pointer == cellSize - 1) ? 0 : pointer + 1;
+                    pointer = (pointer == amount - 1) ? 0 : pointer + 1;
                     break;
                 }
                 case Characters.LAST: {
-                    pointer = (pointer == 0) ? cellSize - 1 : pointer - 1;
+                    pointer = (pointer == 0) ? amount - 1 : pointer - 1;
                     break;
                 }
                 case Characters.PLUS: {
@@ -110,7 +131,8 @@ public class BrainJack {
         System.out.println(builder);
     }
 
-    public static void main(String[] args) {
-        new BrainJack().interpret("++++++++++[>++++++<-]>.");
+    public static void main(String[] args) throws Exception {
+        new BrainJack().interpret(new File("/home/comportment/Projects/BrainJack/src/main/resources/example.bf"));
+        new BrainJack().interpret(">++++++++++[>++++>++++++>++++>+++++>++++>++++>++++++[<]>-]>>++>->----->->+>++[<]>.>.>.>.>.>.>.");
     }
 }
