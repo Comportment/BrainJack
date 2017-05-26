@@ -17,7 +17,7 @@
 package me.diax.comportment.brainjack;
 
 import java.nio.CharBuffer;
-import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * Created by Comportment at 17:24 on 26/05/17
@@ -38,21 +38,33 @@ public class BrainJack {
     public void evalutate(String input) {
         StringBuilder output = new StringBuilder();
         CharBuffer.wrap(input).chars().mapToObj(ch -> (char)ch).forEach(c -> {
-            switch (c) {
-                case Characters.LAST:
-                    if (pointer >= 1) pointer--;
-                    break;
-                case Characters.NEXT:
-                    pointer++;
-                    break;
-                case Characters.PLUS:
-                    cells[pointer]++;
-                    break;
-                case Characters.MINUS:
-                    cells[pointer]--;
-                    break;
-                case Characters.OUT:
-                    output.append(Character.toString((char) cells[pointer]));
+            try {
+                switch (c) {
+                    case Characters.LAST:
+                        if (pointer >= 1) pointer--;
+                        break;
+                    case Characters.NEXT:
+                        pointer++;
+                        break;
+                    case Characters.PLUS:
+                        cells[pointer]++;
+                        break;
+                    case Characters.MINUS:
+                        cells[pointer]--;
+                        break;
+                    case Characters.OUT:
+                        output.append(Character.toString((char) cells[pointer]));
+                        break;
+                    case Characters.INPUT:
+                        try {
+                            cells[pointer] = (byte) new Scanner(System.in).nextLine().charAt(0);
+                        } catch (StringIndexOutOfBoundsException e) {
+                            cells[pointer] = 0;
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
         if (!output.toString().isEmpty()) System.out.println(output);
@@ -60,7 +72,7 @@ public class BrainJack {
 
     public static void main(String[] args) {
         new BrainJack().evalutate(
-                "++++++++++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++++++++++."
+                ",.++++++++++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++.>+++++++++++++++++++++++++++++++++++++++++."
         );
     }
 }

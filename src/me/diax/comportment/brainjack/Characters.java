@@ -37,4 +37,6 @@ public class Characters {
     public static final char RBRACK = ']';
 
     public static final char OUT = '.';
+
+    public static final char INPUT = ',';
 }
