@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.diax.comportment.brainjack</groupId>
     <artifactId>BrainJack</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.7</version>
 
     <url>https://github.com/comportment/brainjack</url>
     <name>BrainJack</name>

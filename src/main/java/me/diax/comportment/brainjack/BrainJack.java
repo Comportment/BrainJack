@@ -42,6 +42,10 @@ public class BrainJack {
         init();
     }
 
+    public static void main(String[] args) throws Exception {
+        System.out.println(new BrainJackEngine().eval(new FileReader(new File("/home/comportment/Projects/BrainJack/src/main/resources/example.bf"))));
+    }
+
     protected void init() {
         cells = new byte[amount];
         pointer = 0;
@@ -132,8 +136,4 @@ public class BrainJack {
         }
         return builder.toString();
     }
-    //public static void main(String[] args) throws Exception {
-    //    new BrainJack().interpret(new File("/home/comportment/Projects/BrainJack/src/main/resources/example.bf"));
-    //    new BrainJack().interpret(">++++++++++[>++++>++++++>++++>+++++>++++>++++>++++++[<]>-]>>++>->----->->+>++[<]>.>.>.>.>.>.>.");
-    //}
 }
